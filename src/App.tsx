@@ -5,6 +5,7 @@ import {
   PlayerSetup,
   FrameScoring,
   FrameResult,
+  About,
 } from '@/routes/';
 import { useTresLogic } from './hooks';
 import { History } from './routes/history';
@@ -60,6 +61,15 @@ function App() {
           element={
             <MainLayout headerName='Game History'>
               <History />
+            </MainLayout>
+          }
+        />
+
+        <Route
+          path='/about'
+          element={
+            <MainLayout headerName='About'>
+              <About />
             </MainLayout>
           }
         />
