@@ -56,10 +56,18 @@ If you play this snooker variation regularly, this tool helps keep scoring simpl
 
 Screenshots of the following screens at the end of this file:
 
-1. Home / Start Game ![Home](/public/main.png)
-2. Player Setup ![Player Setup](/public//add-player.png)
-3. Frame 1 Scoring ![Frame 1 Scoring](/public/scoring.png)
-4. Frame 1 Results ![Frame 1 Result](/public/frame-1-result.png)
-5. Frame 2 Scoring ![Frame 2 Scoring](/public/score-frame-2.png)
-6. Final Results / Leaderboard ![Final Result](/public/final-result.png)
-7. History of Games today ![History](/public/history.png)
+1. Home / Start Game 
+2. Player Setup 
+3. Frame 1 Scoring 
+4. Frame 1 Results 
+5. Frame 2 Scoring 
+6. Final Results / Leaderboard 
+7. History of Games today 
+
+![Home](/public/main.png)
+![Player Setup](/public//add-player.png)
+![Frame 1 Scoring](/public/scoring.png)
+![Frame 1 Result](/public/frame-1-result.png)
+![Frame 2 Scoring](/public/score-frame-2.png)
+![Final Result](/public/final-result.png)
+![History](/public/history.png)
