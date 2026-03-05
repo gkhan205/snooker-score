@@ -25,7 +25,7 @@ export const FrameScoring = () => {
 
   return (
     <div className='flex flex-col justify-between h-full'>
-      <div className='grid gap-3 h-[calc(100vh-100px)] overflow-y-auto'>
+      <div className='space-y-3 h-[calc(100vh-100px)] overflow-y-auto'>
         {(players || []).map((player: Player) => (
           <PlayerDetail
             key={player.id}
