@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import type { Player } from '@/feature/tres';
+import { ResultTable, type Player } from '@/feature/tres';
 import { useTresLogic } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { ArrowUpDown, ChartNoAxesColumn, CirclePlus, Play } from 'lucide-react';
@@ -46,30 +46,7 @@ export const FrameResult = ({ frameNumber }: Props) => {
 
       {frameNumber === 1 && (
         <>
-          <div className='grid gap-2'>
-            <div className='grid grid-cols-6 gap-1 text-primary uppercase font-bold text-sm'>
-              <div className='ms-3'>#</div>
-              <div className='col-span-3'>Player</div>
-              <div className='text-right'>Score</div>
-              <div className='text-right'>Result</div>
-            </div>
-
-            {frameScore.map((player: Player, index: number) => (
-              <div
-                className='grid grid-cols-6 gap-1 bg-snooker-overlay/70 rounded-lg p-4 text-white items-center font-bold border-1 border-snooker-muted/70'
-                key={player.id}>
-                <div>{index + 1}</div>
-                <div className='col-span-3'>{player.name}</div>
-                <div className='text-right'>{player.score}</div>
-                <div
-                  className={cn('text-right', {
-                    'text-red-500': player.finalScore! < 0,
-                  })}>
-                  {player.finalScore}
-                </div>
-              </div>
-            ))}
-          </div>
+          <ResultTable frameNumber={frameNumber} data={frameScore} />
 
           <div className='bg-white p-4 font-bold text-sm rounded-lg my-10 flex items-center gap-3'>
             <div className='bg-primary h-10 w-10 rounded-full flex items-center justify-center text-white'>
@@ -91,34 +68,11 @@ export const FrameResult = ({ frameNumber }: Props) => {
 
       {frameNumber === 2 && (
         <>
-          <div className='grid gap-2'>
-            <div className='grid grid-cols-7 gap-1 text-primary uppercase font-bold text-sm'>
-              <div className='ms-3'>#</div>
-              <div className='col-span-3'>Player</div>
-              <div className='text-right'>F1</div>
-              <div className='text-right'>F2</div>
-              <div className='text-right'>TOTAL</div>
-            </div>
-
-            {frameScore.map((player: Player, index: number) => (
-              <div
-                className={cn(
-                  'grid grid-cols-7 gap-1 bg-snooker-overlay/70 rounded-lg p-4 text-white items-center font-bold border-1 border-snooker-muted/70',
-                  {
-                    'bg-red-500/70 border-red-500/70': loosers?.includes(
-                      player.id,
-                    ),
-                  },
-                )}
-                key={player.id}>
-                <div>{index + 1}</div>
-                <div className='col-span-3'>{player.name}</div>
-                <div className='text-right'>{player?.frameOneScore}</div>
-                <div className='text-right'>{player?.frameTwoScore}</div>
-                <div className='text-right'>{player?.finalScore}</div>
-              </div>
-            ))}
-          </div>
+          <ResultTable
+            frameNumber={frameNumber}
+            data={frameScore}
+            loosers={loosers}
+          />
 
           <div className='bg-white p-4 font-bold text-sm rounded-lg my-10 flex items-center gap-3'>
             <p>

@@ -1,4 +1,4 @@
-import { History, Home, Settings } from 'lucide-react';
+import { History, Home, Info } from 'lucide-react';
 import { NavLink } from 'react-router';
 
 export const Footer = () => {
@@ -22,11 +22,11 @@ export const Footer = () => {
           </div>
         </NavLink>
         <NavLink
-          to='/settings'
+          to='/about'
           className={({ isActive }) => (isActive ? 'text-snooker-gold' : '')}>
           <div className='flex flex-col justify-center items-center'>
-            <Settings />
-            <p>Settings</p>
+            <Info />
+            <p>About</p>
           </div>
         </NavLink>
       </div>
