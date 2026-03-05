@@ -1,73 +1,65 @@
-# React + TypeScript + Vite
+# Snooker Frame Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight score tracking app for a custom snooker-style game played with **3–5 players across two frames**. The app is designed to make it easy to record scores during live play and automatically calculate frame results and final standings.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This application helps players track scores for a variation of snooker where each player competes individually and final frame scores are calculated using the **difference between a player’s score and the next player in the playing order**.
 
-## React Compiler
+The system keeps the original player order for Frame 1 and automatically **reverses the order in Frame 2** to keep gameplay balanced.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+After both frames are completed, the app calculates the **total score for each player** and determines the loser(s).
 
-## Expanding the ESLint configuration
+## Game Rules
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* The game supports **3 to 5 players**.
+* The match consists of **2 frames**.
+* Each player records their own score during each frame.
+* At the end of the frame, the app calculates the **Frame Result**:
+  * The result is the **difference between the player's score and the next player in the playing order**.
+  * Frame 2 automatically **reverses the player order** used in Frame 1.
+* The **Final Score** is calculated by adding the Frame 1 result and Frame 2 result.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Determining the Loser
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* If **3 or 4 players** are playing → the player with the **lowest total score loses**.
+* If **5 players** are playing → the **bottom two players lose**.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Features
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+* Quick score entry optimized for live gameplay
+* Clear player ordering for accurate frame calculations
+* Automatic frame result calculation
+* Automatic player order reversal for Frame 2
+* Final leaderboard with highlighted loser(s)
+* Mobile‑friendly interface for use during matches
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Use Case
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+This app is useful for groups of friends who play casual snooker variations and want a **simple digital scoreboard** that handles scoring rules automatically.
+
+Instead of manually calculating score differences and totals after every frame, the app does the calculations instantly and shows the final standings.
+
+## Future Improvements
+
+* Save match history
+* Player statistics
+* Leaderboards
+* Share match results
+* Multiplayer online scoreboard
+
+---
+
+If you play this snooker variation regularly, this tool helps keep scoring simple so players can focus on the game.
+
+## Screens
+
+Screenshots of the following screens at the end of this file:
+
+1. Home / Start Game ![Home](/public/main.png)
+2. Player Setup ![Player Setup](/public//add-player.png)
+3. Frame 1 Scoring ![Frame 1 Scoring](/public/scoring.png)
+4. Frame 1 Results ![Frame 1 Result](/public/frame-1-result.png)
+5. Frame 2 Scoring ![Frame 2 Scoring](/public/score-frame-2.png)
+6. Final Results / Leaderboard ![Final Result](/public/final-result.png)
+7. History of Games today ![History](/public/history.png)
