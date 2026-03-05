@@ -17,7 +17,7 @@ function App() {
   const frameNumber = isGameEnded && activeGame.currentFrame === 2 ? 2 : 1;
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route
           index
