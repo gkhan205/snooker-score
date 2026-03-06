@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { HashRouter, Route, Routes } from 'react-router';
 import { MainLayout, NoFooterLayout } from '@/components/wrappers';
 import {
   TresMatchMain,
@@ -18,7 +18,7 @@ function App() {
   const frameNumber = isGameEnded && activeGame.currentFrame === 2 ? 2 : 1;
 
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <HashRouter>
       <Routes>
         <Route
           index
@@ -84,7 +84,7 @@ function App() {
           }
         />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

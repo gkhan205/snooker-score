@@ -1,17 +1,24 @@
 import { Button } from '@/components/ui/button';
-import { PlayerDetail, type Player } from '@/feature/tres';
+import { PlayerDetail, PlayerForm, type Player } from '@/feature/tres';
 import { useTresLogic } from '@/hooks';
 import { cn } from '@/lib/utils';
-import { Check, Flag } from 'lucide-react';
-import { useState } from 'react';
+import { Check, CirclePlus, Flag } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export const FrameScoring = () => {
   const navigate = useNavigate();
-  const { players, activeGame, onNextFrame, onEndGame } = useTresLogic();
+  const { players, activeGame, onNextFrame, onEndGame, onAddPlayer } =
+    useTresLogic();
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(
     players[0]?.id || null,
   );
+  const [enableAddPlayerForm, setEnableAddPlayerForm] =
+    useState<boolean>(false);
+
+  const showAddPlayerButton = useMemo(() => {
+    return activeGame?.currentFrame === 1 && players.length < 5;
+  }, [activeGame?.currentFrame, players.length]);
 
   const handleNextFrame = () => {
     onNextFrame();
@@ -34,6 +41,17 @@ export const FrameScoring = () => {
             onSelect={setSelectedPlayerId}
           />
         ))}
+
+        {showAddPlayerButton && (
+          <>
+            <Button
+              className='w-full text-black mt-10'
+              onClick={() => setEnableAddPlayerForm(true)}>
+              <CirclePlus /> Add New Player
+            </Button>
+            {enableAddPlayerForm && <PlayerForm onAddPlayer={onAddPlayer} />}
+          </>
+        )}
       </div>
 
       {activeGame?.currentFrame === 1 ? (
