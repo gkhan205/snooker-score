@@ -9,6 +9,7 @@ import {
 } from '@/routes/';
 import { useTresLogic } from './hooks';
 import { History } from './routes/history';
+import { Payables } from './routes/payables';
 
 function App() {
   const { activeGame } = useTresLogic();
@@ -61,6 +62,15 @@ function App() {
           element={
             <MainLayout headerName='Game History'>
               <History />
+            </MainLayout>
+          }
+        />
+
+        <Route
+          path='/payables'
+          element={
+            <MainLayout headerName='Payables'>
+              <Payables />
             </MainLayout>
           }
         />

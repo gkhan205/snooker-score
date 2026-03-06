@@ -4,8 +4,6 @@ import { useTresLogic } from '@/hooks';
 export const History = () => {
   const { allGamesToday } = useTresLogic();
 
-  console.log(allGamesToday);
-
   return (
     <>
       <div className='flex items-center justify-between'>

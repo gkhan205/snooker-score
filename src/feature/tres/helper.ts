@@ -1,4 +1,6 @@
+import { calculateCost } from '@/lib/utils';
 import type { GameData, Player } from './types';
+import { differenceInMinutes } from 'date-fns';
 
 export const calculateFrameEndScore = (players: Player[] = []) => {
   const finalScore = [];
@@ -64,4 +66,38 @@ export const endMatchCalculation = (game: GameData) => {
     loosers: loosers || [],
     endedAt: new Date(),
   };
+};
+
+export const calculatePayablePerPlayer = (games: GameData[]) => {
+  const playerPayables: Record<string, number> = {};
+  const allPlayers: Player[] = [];
+
+  games.forEach((game) => {
+    const totalMinutes = differenceInMinutes(
+      new Date(game?.endedAt || game.startedAt),
+      new Date(game.startedAt),
+    );
+    const totalAmount = calculateCost(totalMinutes);
+    const amountPerPlayer = totalAmount / game.loosers.length;
+    allPlayers.push(...(game.matchEndScore || []));
+
+    game.loosers.forEach((looser) => {
+      if (playerPayables[looser.id]) {
+        playerPayables[looser.id] += amountPerPlayer;
+      } else {
+        playerPayables[looser.id] = amountPerPlayer;
+      }
+    });
+  });
+
+  return Object.keys(playerPayables)
+    .map((playerId) => {
+      const player = allPlayers.find((p) => p.id === playerId);
+      return {
+        id: playerId,
+        name: player?.name || 'Unknown',
+        amount: playerPayables[playerId],
+      };
+    })
+    .sort((a, b) => b.amount - a.amount);
 };

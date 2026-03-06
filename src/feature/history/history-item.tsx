@@ -7,7 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { cn } from '@/lib/utils';
+import { calculateCost, cn, currencyFormatter } from '@/lib/utils';
 
 type Props = {
   game: GameData;
@@ -16,31 +16,42 @@ type Props = {
 export const HistoryItem = ({ game }: Props) => {
   const tableData = game.matchEndScore || [];
   const loosersList = (game.loosers || []).map((looser) => looser.id);
+  const totalMinutes = differenceInMinutes(
+    new Date(game?.endedAt || game.startedAt),
+    new Date(game.startedAt),
+  );
+  const totalAmount = calculateCost(totalMinutes);
 
   return (
     <div className='bg-primary/10 p-4 rounded-lg border border-primary/20 space-y-3'>
-      <div className='text-xs text-primary flex items-center gap-1 font-bold'>
-        <Clock size={12} />
-        <p>
-          {format(new Date(game.startedAt), 'p')} -{' '}
-          {format(new Date(game?.endedAt || game.startedAt), 'p')}
-        </p>
+      <div className='text-primary flex items-center justify-between gap-1 font-bold'>
+        <div className='flex items-center justify-between gap-1'>
+          <Clock size={12} />
+          <p>
+            {format(new Date(game.startedAt), 'p')} -{' '}
+            {format(new Date(game?.endedAt || game.startedAt), 'p')}
+          </p>
 
-        <p>
-          |{' '}
-          {differenceInMinutes(
-            new Date(game?.endedAt || game.startedAt),
-            new Date(game.startedAt),
-          )}{' '}
-          minutes
+          <p>| {totalMinutes} minutes</p>
+        </div>
+
+        <p className='text-sm font-bold bg-primary text-black rounded-full w-max px-3 py-1'>
+          {currencyFormatter(totalAmount)}
         </p>
       </div>
       <p className='text-sm font-bold text-white'>
         {tableData.map((player) => player.name).join(' vs ')}
       </p>
-      <p className='text-sm font-bold text-red-400'>
-        Looser(s): {game.loosers.map((player) => player.name).join(', ')}{' '}
-      </p>
+      <div className='text-sm font-bold text-white'>
+        <p>Payables:</p>
+
+        {game.loosers.map((player) => (
+          <p key={player.id}>
+            {player.name} :{' '}
+            {currencyFormatter(totalAmount / game.loosers.length)}
+          </p>
+        ))}
+      </div>
 
       <Accordion type='single' collapsible>
         <AccordionItem value='item-1'>

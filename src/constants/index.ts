@@ -12,3 +12,5 @@ export const BALL_COLORS: BallColor[] = [
   { name: 'pink', points: 6 },
   { name: 'black', points: 7 },
 ] as const;
+
+export const COST_PER_HOUR: number = 250;
