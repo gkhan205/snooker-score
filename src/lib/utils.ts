@@ -1,3 +1,4 @@
+import { COST_PER_HOUR } from '@/constants';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -18,4 +19,16 @@ export const getNumberWithOrdinal = (n: number) => {
     return n + 'rd';
   }
   return n + 'th';
+};
+
+export const calculateCost = (minute: number) => {
+  const hours = minute / 60;
+  return Math.round(hours * COST_PER_HOUR);
+};
+
+export const currencyFormatter = (amount: number) => {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+  }).format(amount);
 };
