@@ -6,6 +6,8 @@ export type Player = {
   order: number;
   frameOneScore?: number;
   frameTwoScore?: number;
+  pointsHistory?: number[];
+  lastPoint?: number;
 };
 
 export type GameData = {

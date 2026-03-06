@@ -32,13 +32,15 @@ const getLoosers = (players: Player[]) => {
     (a, b) => b.finalScore! - a.finalScore!,
   );
 
-  if (sortedPlayers.length < 5) {
-    return [sortedPlayers[sortedPlayers.length - 1]];
-  }
+  const total = sortedPlayers.length;
 
-  if (sortedPlayers.length === 5) {
-    return [sortedPlayers[3], sortedPlayers[4]];
-  }
+  if (total === 0) return [];
+
+  const baseLoserCount = total < 5 ? 1 : 2;
+
+  const thresholdScore = sortedPlayers[total - baseLoserCount].finalScore;
+
+  return sortedPlayers.filter((p) => p.finalScore! <= thresholdScore!);
 };
 
 export const endMatchCalculation = (game: GameData) => {

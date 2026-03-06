@@ -23,9 +23,10 @@ interface TresActions {
   endGame: () => void;
   updateScore: (id: string, score: number) => void;
   nextFrame: () => void;
-  // loadTodaysGames: () => void;
+  loadTodaysGames: () => void;
   setNumberOfPlayers: (num: number) => void;
   clearGame: () => void;
+  deleteGame: (gameId: string) => void;
 }
 
 type TresStore = TresState & TresActions;
@@ -47,14 +48,14 @@ export const useTresStore = create<TresStore>()(
       //
       // `allGamesToday` is intentionally excluded from partialize so it stays
       // in sync with the existing `gamesForTheDay` key rather than duplicating data.
-      // loadTodaysGames: () => {
-      //   const today = format(new Date(), 'yyyy-MM-dd');
-      //   const stored =
-      //     loadFromLocalStorage<AllGamesForTheDayData>('gamesForTheDay');
-      //   const allGamesForTheDay: AllGamesForTheDayData = stored ?? {};
-      //   const gamesForToday = allGamesForTheDay[today] || [];
-      //   set({ allGamesToday: gamesForToday });
-      // },
+      loadTodaysGames: () => {
+        const today = format(new Date(), 'yyyy-MM-dd');
+        const stored =
+          loadFromLocalStorage<AllGamesForTheDayData>('gamesForTheDay');
+        const allGamesForTheDay: AllGamesForTheDayData = stored ?? {};
+        const gamesForToday = allGamesForTheDay[today] || [];
+        set({ allGamesToday: gamesForToday });
+      },
 
       setNumberOfPlayers: (num: number) => {
         set({ numberOfPlayers: num });
@@ -62,7 +63,39 @@ export const useTresStore = create<TresStore>()(
 
       addPlayer: (name: string) => {
         if (name.trim() === '') return;
+        const { activeGame, players } = get();
         const id = name.toLowerCase().replace(/\s+/g, '-');
+
+        if (activeGame) {
+          const newPlayer = {
+            id,
+            name,
+            score: 0,
+            finalScore: 0,
+            order: players.length + 1,
+          };
+
+          const frame = activeGame.currentFrame;
+          const playersInFrame =
+            frame === 1
+              ? activeGame.frameOnePlayers
+              : activeGame.frameTwoPlayers;
+          playersInFrame.push(newPlayer);
+
+          const updatedGame: GameData = {
+            ...activeGame,
+            ...(frame === 1
+              ? { frameOnePlayers: playersInFrame }
+              : {
+                  frameTwoPlayers: playersInFrame,
+                  frameOnePlayers: playersInFrame,
+                }),
+          };
+
+          set({ activeGame: updatedGame, players: playersInFrame });
+          return;
+        }
+
         set((state) => ({
           players: [
             ...state.players,
@@ -129,7 +162,14 @@ export const useTresStore = create<TresStore>()(
         const { frame, activeGame } = get();
 
         const updatedPlayers = get().players.map((p) =>
-          p.id === id ? { ...p, score: p.score + score } : p,
+          p.id === id
+            ? {
+                ...p,
+                score: p.score + score,
+                pointsHistory: [...(p.pointsHistory || []), score],
+                lastPoint: score,
+              }
+            : p,
         );
 
         if (!activeGame) return;
@@ -153,7 +193,7 @@ export const useTresStore = create<TresStore>()(
         );
         const reversedPlayers = [...activeGame.frameOnePlayers]
           .reverse()
-          .map((p) => ({ ...p, score: 0 }));
+          .map((p, index) => ({ ...p, score: 0, order: index + 1 }));
 
         const updatedGame: GameData = {
           ...activeGame,
@@ -171,6 +211,22 @@ export const useTresStore = create<TresStore>()(
 
       clearGame: () => {
         set({ activeGame: null, players: [], frame: 1, numberOfPlayers: 3 });
+      },
+
+      deleteGame: (gameId: string) => {
+        const { allGamesToday } = get();
+        const today = format(new Date(), 'yyyy-MM-dd');
+        const stored =
+          loadFromLocalStorage<AllGamesForTheDayData>('gamesForTheDay');
+        const allGamesForTheDay: AllGamesForTheDayData = stored ? stored : {};
+
+        const filteredGames = allGamesToday.filter(
+          (game) => game.id !== gameId,
+        );
+        allGamesForTheDay[today] = filteredGames;
+        saveToLocalStorage(allGamesForTheDay, 'gamesForTheDay');
+
+        set({ allGamesToday: filteredGames });
       },
     }),
     {

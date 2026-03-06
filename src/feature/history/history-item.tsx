@@ -25,14 +25,16 @@ export const HistoryItem = ({ game }: Props) => {
   return (
     <div className='bg-primary/10 p-4 rounded-lg border border-primary/20 space-y-3'>
       <div className='text-primary flex items-center justify-between gap-1 font-bold'>
-        <div className='flex items-center justify-between gap-1'>
-          <Clock size={12} />
-          <p>
-            {format(new Date(game.startedAt), 'p')} -{' '}
-            {format(new Date(game?.endedAt || game.startedAt), 'p')}
-          </p>
+        <div className='flex items-center justify-between gap-1 flex-wrap'>
+          <div className='flex items-center gap-2'>
+            <Clock size={12} />
+            <p>
+              {format(new Date(game.startedAt), 'p')} -{' '}
+              {format(new Date(game?.endedAt || game.startedAt), 'p')}
+            </p>
+          </div>
 
-          <p>| {totalMinutes} minutes</p>
+          <p>({totalMinutes} minutes)</p>
         </div>
 
         <p className='text-sm font-bold bg-primary text-black rounded-full w-max px-3 py-1'>
@@ -46,7 +48,7 @@ export const HistoryItem = ({ game }: Props) => {
         <p>Payables:</p>
 
         {game.loosers.map((player) => (
-          <p key={player.id}>
+          <p key={player.id} className='text-red-500'>
             {player.name} :{' '}
             {currencyFormatter(totalAmount / game.loosers.length)}
           </p>

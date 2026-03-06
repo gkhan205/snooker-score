@@ -2,12 +2,15 @@ import type { Player } from '../types';
 import { PointBalls } from '@/components/ui/point-balls';
 import { useTresLogic } from '@/hooks';
 import { cn, getNumberWithOrdinal } from '@/lib/utils';
+import { PlayerPointHistory } from './player-point-history';
+import { Button } from '@/components/ui/button';
+import { Check } from 'lucide-react';
 
 type Props = {
   player: Player;
   isSelected?: boolean;
   onUpdateScore?: (id: string, score: number) => void;
-  onSelect?: (id: string) => void;
+  onSelect?: (id: string | null) => void;
 };
 
 export const PlayerDetail = ({ player, isSelected, onSelect }: Props) => {
@@ -15,6 +18,11 @@ export const PlayerDetail = ({ player, isSelected, onSelect }: Props) => {
 
   const handleSelect = () => {
     onSelect?.(player.id);
+  };
+
+  const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    onSelect?.(null);
   };
 
   const handleUpdateScore = (score: number) => {
@@ -46,8 +54,12 @@ export const PlayerDetail = ({ player, isSelected, onSelect }: Props) => {
             {player.name}{' '}
           </p>
         </div>
-        {!isSelected && (
+        {!isSelected ? (
           <h2 className='text-primary font-bold text-3xl'>{player.score}</h2>
+        ) : (
+          <Button className='text-black rounded-full' onClick={handleClose}>
+            <Check />
+          </Button>
         )}
       </div>
       {isSelected && (
@@ -56,8 +68,17 @@ export const PlayerDetail = ({ player, isSelected, onSelect }: Props) => {
             className={cn(
               'border-1 border-primary/30 text-center py-3 mb-5 rounded-lg bg-snooker-overlay/30',
             )}>
-            <h1 className={cn('text-6xl font-bold')}>{player.score}</h1>
             <p>Total Points</p>
+            <h1 className={cn('text-6xl font-bold')}>{player.score}</h1>
+
+            {!!player.lastPoint && (
+              <div className='border-t-1 border-primary/30 pt-2 mt-2 flex items-center justify-center'>
+                <PlayerPointHistory
+                  pointsHistory={player?.pointsHistory || []}
+                />
+                <p>Last Point: {player.lastPoint}</p>
+              </div>
+            )}
           </div>
           <div
             className={cn('hidden', {

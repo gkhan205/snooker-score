@@ -10,12 +10,15 @@ type Props = {
 };
 
 export const PointBalls = ({ onClick, isFoulSection = false }: Props) => {
-  const handleClick = (score: number) => () => {
-    if (onClick) {
-      const finalScore = isFoulSection ? -score : score;
-      onClick(finalScore);
-    }
-  };
+  const handleClick =
+    (score: number) => (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation();
+
+      if (onClick) {
+        const finalScore = isFoulSection ? -score : score;
+        onClick(finalScore);
+      }
+    };
 
   const colors = useMemo(() => {
     if (!isFoulSection) return BALL_COLORS;
@@ -24,12 +27,12 @@ export const PointBalls = ({ onClick, isFoulSection = false }: Props) => {
   }, [isFoulSection]);
 
   return (
-    <div className='flex flex-wrap gap-3 mb-5'>
+    <div className='flex flex-wrap gap-4 mb-5'>
       {colors.map((color) => (
         <button
           key={color.name}
           className={cn(
-            'w-10 h-10 border rounded-full font-bold shadow-lg flex items-center justify-center text-white',
+            'w-14 h-14 border rounded-full font-bold shadow-lg flex items-center justify-center text-white',
             {
               'text-black': blackTextColors.includes(
                 color.name as (typeof blackTextColors)[number],

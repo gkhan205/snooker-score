@@ -1,20 +1,28 @@
+import { DateFilters } from '@/components/wrappers';
+import type { GameData } from '@/feature/tres';
 import { calculatePayablePerPlayer } from '@/feature/tres/helper';
 import { useTresLogic } from '@/hooks';
 import { currencyFormatter } from '@/lib/utils';
-import { format } from 'date-fns';
+import { useState } from 'react';
 
 export const Payables = () => {
-  const { allGamesToday } = useTresLogic();
-  const payablePerPlayer = calculatePayablePerPlayer(allGamesToday);
+  const { allGamesToday, onFilterByDate } = useTresLogic();
+  const [filteredGames, setFilteredGames] = useState<GameData[]>(allGamesToday);
+
+  const handleDateSelect = (date: Date) => {
+    const filtered = onFilterByDate(date);
+    setFilteredGames(filtered);
+  };
+
+  const payablePerPlayer = calculatePayablePerPlayer(filteredGames);
 
   return (
     <>
-      <h1 className='text-primary text-2xl mb-5 text-center font-bold'>
-        {format(new Date(), 'PP')}
-      </h1>
-      {allGamesToday.length === 0 ? (
+      <DateFilters onSelect={handleDateSelect} />
+
+      {filteredGames.length === 0 ? (
         <div className='flex items-center justify-center h-full'>
-          <p className='text-snooker-muted text-sm'>No games today...</p>
+          <p className='text-snooker-muted text-2xl'>No games played...</p>
         </div>
       ) : (
         <div className='grid gap-2'>
