@@ -193,7 +193,13 @@ export const useTresStore = create<TresStore>()(
         );
         const reversedPlayers = [...activeGame.frameOnePlayers]
           .reverse()
-          .map((p, index) => ({ ...p, score: 0, order: index + 1 }));
+          .map((p, index) => ({
+            ...p,
+            score: 0,
+            order: index + 1,
+            pointsHistory: [],
+            lastPoint: 0,
+          }));
 
         const updatedGame: GameData = {
           ...activeGame,
