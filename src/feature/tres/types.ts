@@ -8,6 +8,7 @@ export type Player = {
   frameTwoScore?: number;
   pointsHistory?: number[];
   lastPoint?: number;
+  payPercentage?: number;
 };
 
 export type GameData = {

@@ -55,7 +55,9 @@ export const PlayerDetail = ({ player, isSelected, onSelect }: Props) => {
           </p>
         </div>
         {!isSelected ? (
-          <h2 className='text-primary font-bold text-3xl'>{player.score}</h2>
+          <div className='flex items-center gap-3'>
+            <h2 className='text-primary font-bold text-3xl'>{player.score}</h2>
+          </div>
         ) : (
           <Button className='text-black rounded-full' onClick={handleClose}>
             <Check />

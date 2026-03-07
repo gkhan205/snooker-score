@@ -1,8 +1,13 @@
 import { Button } from '@/components/ui/button';
-import { PlayerDetail, PlayerForm, type Player } from '@/feature/tres';
+import {
+  FrameScoreOverview,
+  PlayerDetail,
+  PlayerForm,
+  type Player,
+} from '@/feature/tres';
 import { useTresLogic } from '@/hooks';
 import { cn } from '@/lib/utils';
-import { Check, CirclePlus, Flag } from 'lucide-react';
+import { ChartNoAxesColumn, Check, CirclePlus, Flag } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -14,6 +19,8 @@ export const FrameScoring = () => {
     players[0]?.id || null,
   );
   const [enableAddPlayerForm, setEnableAddPlayerForm] =
+    useState<boolean>(false);
+  const [enableScoreOverview, setEnableScoreOverview] =
     useState<boolean>(false);
 
   const showAddPlayerButton = useMemo(() => {
@@ -33,6 +40,21 @@ export const FrameScoring = () => {
   return (
     <div className='flex flex-col justify-between h-full'>
       <div className='space-y-3 h-[calc(100vh-100px)] overflow-y-auto'>
+        {activeGame?.currentFrame === 2 && (
+          <Button
+            className='w-full text-black mb-5'
+            onClick={() => setEnableScoreOverview((prev) => !prev)}>
+            <ChartNoAxesColumn />
+
+            {enableScoreOverview
+              ? 'Hide Score Overview'
+              : 'Show Score Overview'}
+          </Button>
+        )}
+        {activeGame?.currentFrame === 2 && enableScoreOverview && (
+          <FrameScoreOverview />
+        )}
+
         {(players || []).map((player: Player) => (
           <PlayerDetail
             key={player.id}

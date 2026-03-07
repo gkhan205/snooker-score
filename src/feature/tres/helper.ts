@@ -103,3 +103,25 @@ export const calculatePayablePerPlayer = (games: GameData[]) => {
     })
     .sort((a, b) => b.amount - a.amount);
 };
+
+export const calculateScoreOverview = (
+  game: GameData,
+  currentPlayers: Player[],
+) => {
+  const { frameOnePlayers } = game;
+  const calculatedCurrentPlayers = calculateFrameEndScore(currentPlayers);
+
+  return calculatedCurrentPlayers.map((current) => {
+    const frameOnePlayer = frameOnePlayers.find((p) => p.id === current.id);
+
+    return {
+      id: current.id,
+      name: current.name,
+      score: current.score,
+      order: current.order,
+      frameOneScore: frameOnePlayer?.finalScore || 0,
+      frameTwoScore: current.finalScore,
+      finalScore: (frameOnePlayer?.finalScore || 0) + current.finalScore,
+    };
+  });
+};
