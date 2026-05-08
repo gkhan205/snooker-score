@@ -13,7 +13,6 @@ import { Payables } from './routes/payables';
 
 function App() {
   const { activeGame } = useTresLogic();
-
   const isGameEnded = !!activeGame?.endedAt;
   const frameNumber = isGameEnded && activeGame.currentFrame === 2 ? 2 : 1;
 
