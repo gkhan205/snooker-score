@@ -9,7 +9,6 @@ type Props = {
 export const DateFilters = ({ onSelect }: Props) => {
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-
   const sixDaysAgo = subDays(today, 3);
 
   const lastSevenDays = eachDayOfInterval({
