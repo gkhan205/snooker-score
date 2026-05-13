@@ -1,4 +1,5 @@
 # Snooker Frame Tracker
+---
 
 A lightweight score tracking app for a custom snooker-style game played with **3–5 players across two frames**. The app is designed to make it easy to record scores during live play and automatically calculate frame results and final standings.
 
